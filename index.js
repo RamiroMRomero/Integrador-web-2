@@ -4,12 +4,15 @@ const translate = require("node-google-translate-skidz");
 
 const app = express()
 
+
 app.use(express.static(path.join(__dirname + '/public')))
 
 app.get("/translate/:text", async (req, res) => {
     translation = await translateToSpanish(req.params.text)
     res.json( {textoTraducido: translation} )
 })
+
+
 
 app.use((req, res) => {
     res.status(404);

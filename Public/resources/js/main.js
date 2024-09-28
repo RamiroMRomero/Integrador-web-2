@@ -4,6 +4,7 @@ const keywordInput = document.getElementById("keyword")
 const locationInput = document.getElementById("location")
 const gallery = document.getElementById("resultGallery")
 const footer = document.getElementById("footer")
+const modal = document.getElementById("modal")
 
 ///////////////////
 
@@ -155,7 +156,50 @@ function renderCards(artworks) {
         artworkCard.appendChild(dynasty)
     }
 
+    const cardButton = document.createElement('button')
+    cardButton.id = artworks.objectID
+    cardButton.textContent = "ver imagenes adicionales"
+    cardButton.setAttribute('onclick', 'createModal(this.id)')
+
+    artworkCard.appendChild(cardButton)
+
     gallery.appendChild(artworkCard)
+}
+
+function createModal(id) {
+    clearModal()
+    fetch(baseURL + "objects/" + id).then((res) => res.json()).then((data) => {
+        additionalImages = data.additionalImages
+        if(additionalImages) {
+            additionalImages.forEach(i => {
+                const image = document.createElement('img')
+                image.setAttribute('src', i)
+                modal.appendChild(image)
+            })
+            modal.style.display = 'block'
+
+            const buttonDiv = document.createElement('div')
+            const exit = document.createElement('button')
+            exit.setAttribute('onclick', 'clearModal()')
+            exit.textContent = 'X'
+
+            buttonDiv.setAttribute('class', 'buttonDiv')
+            buttonDiv.appendChild(exit)
+
+            modal.appendChild(buttonDiv)
+        } else {
+
+        }
+    })
+}
+
+function clearModal() {
+    let child1 = modal.lastElementChild
+    while (child1) {
+        modal.removeChild(child1)
+        child1 = modal.lastElementChild
+    }
+    modal.style.display = 'none'
 }
 
 function clearGallery() {
@@ -200,3 +244,5 @@ function showCards(allIDs) {
         })
     })
 }
+
+encodeURIComponent
